@@ -12,7 +12,7 @@ while True:
     ret, frame = cap.read()
     frame = imutils.resize(frame,width=600)
     cv2.circle(frame, (300, 225), 5, (0, 0, 255), -1)
-    blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+    blurred = cv2.medianBlur(frame,5)
     gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
     ret1,img = cv2.threshold(gray, 240, 255, cv2.THRESH_BINARY)
     #img = cv2.bilateralFilter(thresh1, 11, 30, 30)
@@ -31,10 +31,11 @@ while True:
             cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
     else:
-        center = (0, 0)
+        center = (-1, -1)
     salji = str(center[0]) + "," + str(center[1]) + "."
     arduino.write(bytes(salji))
-    cv2.imshow('perica', frame)
+    cv2.imshow('frame', frame)
+    cv2.imshow('gray', img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 cap.release()
